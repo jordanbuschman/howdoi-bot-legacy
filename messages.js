@@ -2,6 +2,7 @@ var request = require('request');
 var jsdom = require('node-jsdom');
 var google = require('google');
 var markdown = require('to-markdown');
+var async = require('async');
 var Promise = require('promise');
 
 module.exports = {
@@ -62,24 +63,27 @@ module.exports = {
             if (!links) {
                 resolve(params);
             } else {
-                for (i = 0; i < links.length; i++) {
-                    (function(link) {
-                        jsdom.env(link, function(errs, window) {
-                            if (errs) {
-                                return reject(errs[0]);
+                async.eachSeries(links, function(link, callback){
+                    jsdom.env(link, function(errs, window) {
+                        if (errs) {
+                            return callback(errs[0]);
+                        } else {
+                            var results = window.document.getElementsByClassName('ya-q-full-text');
+                            console.log('Checking ' + link);
+                            console.log(results.length);
+                            if (results && results.length >= 2) {
+                                console.log('Found result!');
+                                var topResult = results[1].innerHTML;
+                                return resolve({ roomId: roomId, text: topResult });
                             } else {
-                                var results = window.document.getElementsByClassName('ya-q-full-text');
-                                console.log(results.length);
-                                if (results && results.length >= 2) {
-                                    console.log('Found result!');
-                                    var topResult = results[1].innerHTML;
-                                    return resolve({ roomId: roomId, text: topResult });
-                                }
+                                console.log('No result found for ' + link);
+                                callback();
                             }
-                        })
-                    })(links[i]);
-                    console.log('Did not find any results for ' + links[i]);
-                }
+                        }
+                    });
+                }, function(err) {
+                    return reject(err);
+                });
                 console.log('here');
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
