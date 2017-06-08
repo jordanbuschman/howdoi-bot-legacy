@@ -66,7 +66,7 @@ module.exports = {
                 async.eachSeries(links, function(link, callback){
                     jsdom.env(link, function(errs, window) {
                         if (errs) {
-                            return callback(errs[0]);
+                            return reject(errs[0]);
                         } else {
                             var results = window.document.getElementsByClassName('ya-q-full-text');
                             console.log('Checking ' + link);
@@ -81,11 +81,10 @@ module.exports = {
                             }
                         }
                     });
-                }, function(err) {
-                    return reject(err);
+                }, function() {
+                    console.log('here');
+                    resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
                 });
-                console.log('here');
-                resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
         });
     },
