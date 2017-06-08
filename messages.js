@@ -32,17 +32,20 @@ module.exports = {
         });
     },
 
-    getQuestionLink: function(params) {
+    getQuestionLinks: function(params) {
         return new Promise(function(resolve, reject) {
             var roomId = params.roomId;
             var input = params.input;
 
-            google(input + ' site:answers.yahoo.com', function(err, res) {
+            google(input + ' site:answers.yahoo.com/question', function(err, res) {
                 if (err) {
                     reject(err);
                 } else {
                     if (res.links.length > 0) {
-                        resolve({ roomId: roomId, link: res.links[0].href });
+                        var hrefs = res.links.map(function(link) {
+                            return link.href;
+                        });
+                        resolve({ roomId: roomId, links: href });
                     } else {
                         resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
                     }
@@ -54,19 +57,25 @@ module.exports = {
     getYAResponse: function(params) {
         return new Promise(function(resolve, reject) {
             var roomId = params.roomId;
-            var link = params.link;
+            var links = params.links;
 
-            if (!link) {
+            if (!links) {
                 resolve(params);
             } else {
-                jsdom.env(link, function(errs, window) {
-                    if (errs) {
-                        reject(errs[0]);
-                    } else {
-                        var result = window.document.getElementsByClassName('ya-q-full-text')[1].innerHTML;
-                        resolve({ roomId: roomId, text: result });
-                    }
-                });
+                for (link in links) {
+                    jsdom.env(link, function(errs, window) {
+                        if (errs) {
+                            return reject(errs[0]);
+                        } else {
+                            var results = window.document.getElementsByClassName('ya-q-full-text');
+                            if (results && results.length >= 2) {
+                                var topResult = results[1].innerHTML;
+                                return resolve({ roomId: roomId, text: result });
+                            }
+                        }
+                    });
+                }
+                resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
         });
     },

@@ -30,7 +30,7 @@ router.post('/message', checkHeaders, function(req, res, next) {
     }
 
     messages.getText({ messageId: req.body.data.id })
-        .then(messages.getQuestionLink)
+        .then(messages.getQuestionLinks)
         .then(messages.getYAResponse)
         .then(messages.sendMessage)
         .then(res.end.bind(res))
