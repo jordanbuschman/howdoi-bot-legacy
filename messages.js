@@ -62,22 +62,24 @@ module.exports = {
             if (!links) {
                 resolve(params);
             } else {
-                links.forEach(function(link) {
-                    jsdom.env(link, function(errs, window) {
-                        if (errs) {
-                            return reject(errs[0]);
-                        } else {
-                            var results = window.document.getElementsByClassName('ya-q-full-text');
-                            console.log(results.length);
-                            if (results && results.length >= 2) {
-                                console.log('Found result!');
-                                var topResult = results[1].innerHTML;
-                                return resolve({ roomId: roomId, text: topResult });
+                for (link in links) {
+                    (function(l) {
+                        jsdom.env(l, function(errs, window) {
+                            if (errs) {
+                                return reject(errs[0]);
+                            } else {
+                                var results = window.document.getElementsByClassName('ya-q-full-text');
+                                console.log(results.length);
+                                if (results && results.length >= 2) {
+                                    console.log('Found result!');
+                                    var topResult = results[1].innerHTML;
+                                    return resolve({ roomId: roomId, text: topResult });
+                                }
                             }
-                        }
-                    });
+                        })
+                    })(link);
                     console.log('Did not find any results for ' + link);
-                });
+                }
                 console.log('here');
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
