@@ -62,9 +62,9 @@ module.exports = {
             if (!links) {
                 resolve(params);
             } else {
-                for (link in links) {
-                    (function(l) {
-                        jsdom.env(l, function(errs, window) {
+                for (i = 0; i < links.length; i++) {
+                    (function(link) {
+                        jsdom.env(link, function(errs, window) {
                             if (errs) {
                                 return reject(errs[0]);
                             } else {
@@ -77,8 +77,8 @@ module.exports = {
                                 }
                             }
                         })
-                    })(link);
-                    console.log('Did not find any results for ' + link);
+                    })(links[i]);
+                    console.log('Did not find any results for ' + links[i]);
                 }
                 console.log('here');
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
