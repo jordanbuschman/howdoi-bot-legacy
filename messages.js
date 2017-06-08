@@ -45,7 +45,6 @@ module.exports = {
                         var hrefs = res.links.map(function(link) {
                             return link.href;
                         });
-                        console.log(hrefs);
                         resolve({ roomId: roomId, links: hrefs });
                     } else {
                         resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
@@ -69,13 +68,17 @@ module.exports = {
                             return reject(errs[0]);
                         } else {
                             var results = window.document.getElementsByClassName('ya-q-full-text');
+                            console.log(results.length);
                             if (results && results.length >= 2) {
+                                console.log('Found result!');
                                 var topResult = results[1].innerHTML;
                                 return resolve({ roomId: roomId, text: topResult });
                             }
                         }
                     });
+                    console.log('Did not find any results for ' + link);
                 });
+                console.log('here');
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
         });
