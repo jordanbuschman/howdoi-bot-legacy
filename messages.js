@@ -71,7 +71,7 @@ module.exports = {
                             var results = window.document.getElementsByClassName('ya-q-full-text');
                             if (results && results.length >= 2) {
                                 var topResult = results[1].innerHTML;
-                                return resolve({ roomId: roomId, text: result });
+                                return resolve({ roomId: roomId, text: topResult });
                             }
                         }
                     });
