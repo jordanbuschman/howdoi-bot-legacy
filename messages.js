@@ -45,7 +45,7 @@ module.exports = {
                         var hrefs = res.links.map(function(link) {
                             return link.href;
                         });
-                        resolve({ roomId: roomId, links: href });
+                        resolve({ roomId: roomId, links: hrefs });
                     } else {
                         resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
                     }
