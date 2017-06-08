@@ -45,6 +45,7 @@ module.exports = {
                         var hrefs = res.links.map(function(link) {
                             return link.href;
                         });
+                        console.log(hrefs);
                         resolve({ roomId: roomId, links: hrefs });
                     } else {
                         resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
@@ -62,7 +63,7 @@ module.exports = {
             if (!links) {
                 resolve(params);
             } else {
-                for (link in links) {
+                links.forEach(function(link) {
                     jsdom.env(link, function(errs, window) {
                         if (errs) {
                             return reject(errs[0]);
@@ -74,7 +75,7 @@ module.exports = {
                             }
                         }
                     });
-                }
+                });
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             }
         });
