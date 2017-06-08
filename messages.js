@@ -3,6 +3,7 @@ var jsdom = require('node-jsdom');
 var google = require('google');
 var markdown = require('to-markdown');
 var async = require('async');
+var debug = require('debug')('howdoi-bot:messaging');
 var Promise = require('promise');
 
 module.exports = {
@@ -69,20 +70,19 @@ module.exports = {
                             return reject(errs[0]);
                         } else {
                             var results = window.document.getElementsByClassName('ya-q-full-text');
-                            console.log('Checking ' + link);
-                            console.log(results.length);
+                            var title = window.document.getElementsByClassName('Fz-24')[0];
+                            debug('Checking ' + link);
                             if (results && results.length >= 2) {
-                                console.log('Found result!');
+                                debug('Found result!');
                                 var topResult = results[1].innerHTML;
-                                return resolve({ roomId: roomId, text: topResult });
+                                var titleText = 'I got you fam, your quesiton is: **"' + title.textContent.trim() + '"**\n';
+                                return resolve({ roomId: roomId, text: titleText + topResult });
                             } else {
-                                console.log('No result found for ' + link);
                                 callback();
                             }
                         }
                     });
                 }, function() {
-                    console.log('here');
                     resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
                 });
             }
