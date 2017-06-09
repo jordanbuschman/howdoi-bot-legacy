@@ -39,7 +39,7 @@ module.exports = {
             var roomId = params.roomId;
             var input = params.input;
 
-            google('"how do I" ' + input + ' site:answers.yahoo.com/question', function(err, res) {
+            google('how do I ' + input + ' site:answers.yahoo.com/question', function(err, res) {
                 if (err) {
                     reject(err);
                 } else {
@@ -75,8 +75,8 @@ module.exports = {
                             if (results && results.length >= 2) {
                                 debug('Found result!');
                                 var topResult = results[1].innerHTML;
-                                var titleText = 'I got you fam, your question is: **"' + title.textContent.trim() + '"**\n\n';
-                                return resolve({ roomId: roomId, text: titleText + topResult });
+                                var titleMD = '_I got you fam, your search is:_ **"' + title.textContent.trim() + '"**';
+                                return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
                             } else {
                                 callback();
                             }
@@ -92,7 +92,10 @@ module.exports = {
     sendMessage: function(params) {
         return new Promise(function(resolve, reject) {
             var roomId = params.roomId;
+            var title = params.title;
             var text = params.text;
+
+            var body = (title ? title : '') + '\n\n---\n' + text + '\n\n---\n\n';
     
             request({
                 method: 'POST',
@@ -102,7 +105,7 @@ module.exports = {
                 },
                 form: {
                     roomId: roomId,
-                    markdown: markdown(text)
+                    markdown: body
                 }
             }, function(err, response, body) {
                 if (err) {
