@@ -75,7 +75,7 @@ module.exports = {
                             if (results && results.length >= 2) {
                                 debug('Found result!');
                                 var topResult = results[1].innerHTML;
-                                var titleText = 'I got you fam, your quesiton is: **"' + title.textContent.trim() + '"**\n';
+                                var titleText = 'I got you fam, your question is: **"' + title.textContent.trim() + '"**\\n\\n';
                                 return resolve({ roomId: roomId, text: titleText + topResult });
                             } else {
                                 callback();
