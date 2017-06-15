@@ -74,7 +74,7 @@ module.exports = {
                             debug('Checking ' + link);
                             if (results && results.length >= 2) {
                                 debug('Found result!');
-                                var topResult = results[1].innerHTML;
+                                var topResult = results[0].innerHTML;
                                 var titleMD = '_I got you fam, your search is:_ **"' + title.textContent.trim() + '"**';
                                 return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
                             } else {
