@@ -71,11 +71,16 @@ module.exports = {
                         } else {
                             var results = window.document.getElementsByClassName('ya-q-full-text');
                             var title = window.document.getElementsByClassName('Fz-24')[0];
-                            debug('Checking ' + link);
-                            if (results && results.length >= 2) {
-                                debug('Found result!');
+                            var hasEllipses = window.document.querySelectorAll('.Fz-13.Fw-n.Mb-10 .ya-q-full-text').length;
+                            var responsePhrase = '_Say no more fam, I know exactly what you want to ask:_'
+
+                            if (results && hasEllipses && results.length >= 2) {
+                                var topResult = results[1].innerHTML;
+                                var titleMD = responsePhrase + ' **"' + title.textContent.trim() + '"**';
+                                return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
+                            } else if (results && !hasEllipses && results.length >= 1) {
                                 var topResult = results[0].innerHTML;
-                                var titleMD = '_Say no more fam, I know exactly what you want to ask:_ **"' + title.textContent.trim() + '"**';
+                                var titleMD = responsePhrase + ' **"' + title.textContent.trim() + '"**';
                                 return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
                             } else {
                                 callback();
