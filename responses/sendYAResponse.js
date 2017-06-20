@@ -1,4 +1,4 @@
-var debug = require('debug')('howdoi-bot: send-ya-response');
+var debug = require('debug')('howdoi-bot:send-ya-response');
 
 var async = require('async');
 var google = require('google');

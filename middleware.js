@@ -1,8 +1,14 @@
+var debug = require('debug')('howdoi-bot:middleware');
+
 var crypto = require('crypto');
 
 module.exports = {
     checkHeaders: function(req, res, next) {
+        debug('Checking headers...');
+
         if (process.env.NODE_ENV === 'development') {
+            debug('Dev environment, skipping...');
+
             return next();
         }
     
@@ -15,6 +21,7 @@ module.exports = {
             return res.status(400).json({ 'status': 400, 'message': 'Secrets don\'t match' });
         }
     
+        debug('Done.');
         next();
     }
 };
