@@ -1,3 +1,5 @@
+var debug = require('debug')('howdoi-bot: send-ya-response');
+
 var async = require('async');
 var google = require('google');
 var jsdom = require('node-jsdom');
@@ -7,10 +9,14 @@ var request = require('request');
 
 function getQuestionLinks(params) {
     return new Promise(function(resolve, reject) {
+        debug('Getting question links for query...');
+
         var roomId = params.roomId;
         var input = params.input;
 
         google('how do I ' + input + ' site:answers.yahoo.com/question', function(err, res) {
+            debug('Done.');
+
             if (err) {
                 reject(err);
             } else {
@@ -36,6 +42,8 @@ function getYAResponse(params) {
             resolve(params);
         } else {
             async.eachSeries(links, function(link, callback){
+                debug('Checking link for answer...');
+
                 jsdom.env(link, function(errs, window) {
                     if (errs) {
                         return reject(errs[0]);
@@ -46,19 +54,23 @@ function getYAResponse(params) {
                         var responsePhrase = '_Say no more fam, I know exactly what you want to ask:_'
 
                         if (results && hasEllipses && results.length >= 2) {
+                            debug('Done.');
+
                             var topResult = results[1].innerHTML;
                             var titleMD = responsePhrase + ' **"' + title.textContent.trim() + '"**';
                             return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
                         } else if (results && !hasEllipses && results.length >= 1) {
+                            debug('Done.');
+
                             var topResult = results[0].innerHTML;
                             var titleMD = responsePhrase + ' **"' + title.textContent.trim() + '"**';
                             return resolve({ roomId: roomId, title: titleMD, text: markdown(topResult) });
-                        } else {
-                            callback();
                         }
                     }
                 });
             }, function() {
+                debug('No results found.');
+
                 resolve({ roomId: roomId, text: 'Beep boop, no results found.' });
             });
         }
@@ -67,6 +79,8 @@ function getYAResponse(params) {
 
 function sendYAMessage(params) {
     return new Promise(function(resolve, reject) {
+        debug('Sending answer to Spark...');
+
         var roomId = params.roomId;
         var title = params.title;
         var text = params.text;
@@ -91,6 +105,8 @@ function sendYAMessage(params) {
                     var e = new Error(JSON.parse(body).message);
                     reject({ status: response.statusCode, message: e.message, stack: e.stack });
                 } else {
+                    debug('Done.');
+
                     resolve();
                 }
             }

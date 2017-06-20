@@ -1,3 +1,5 @@
+var debug = require('debug')('howdoi-bot:routes');
+
 var express = require('express');
 var path = require('path');
 
@@ -11,6 +13,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/message', checkHeaders, function(req, res, next) {
+    debug('Got message.');
+
     if (!req.body.data) {
         return res.status(400).json({ 'status': 400, 'message': 'Missing message body' });
     }

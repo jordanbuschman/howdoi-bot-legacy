@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+var debug = require('debug')('howdoi-bot:server');
+
 var app = require('../app');
 var http = require('http');
 
@@ -85,4 +87,5 @@ function onListening() {
     var bind = typeof addr === 'string'
         ? 'pipe ' + addr
         : 'port ' + addr.port;
+    debug('Listening on ' + bind);
 }
