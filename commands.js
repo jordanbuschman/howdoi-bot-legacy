@@ -1,0 +1,64 @@
+var spark = require('./spark');
+
+function sendUnrecognizedCommand(roomId, end) {
+    var text = 'Unrecognized command. To see a list of supported commands, use the command `howdoi /help`.';
+
+    spark.sendMessage(roomId, text, function(err) {
+        if (err) {
+            throw err;
+        } else {
+            end();
+        }
+    });
+}
+
+function aboutFunction(roomId, parameters, end) {
+    spark.sendMessage(roomId, 'About function goes here', function(err) {
+        if (err) {
+            throw err;
+        } else {
+            end();
+        }
+    });
+}
+
+function helpFunction(roomId, parameters, end) {
+    var text = 'You can type any of the following commands:\n';
+    for (key in commandList) {
+        text += '* **\/' + key + '**';
+        if ('parameters' in commandList[key] && commandList[key].parameters.length) {
+            text += '_(';
+            for (var i = 0; i < commandList[key].parameters.length-1; i++) {
+                text += commandList[key].parameters[i] + ', ';
+            }
+            text += commandList[key].parameters[commandList[key].parameters.length-1] + ')_';
+        }
+        text += ': ' + commandList[key].description + '\n';
+    }
+
+    spark.sendMessage(roomId, text, function(err) {
+        if (err) {
+            throw err;
+        } else {
+            end();
+        }
+    });
+}
+
+var commandList = {
+    'about': {
+        'description': 'Get information about howdoi-bot.',
+        'parameters': [],
+        'function': aboutFunction
+    },
+    'help': {
+        'description': 'Display this list.',
+        'parameters': [],
+        'function': helpFunction
+    }
+};
+
+module.exports = {
+    commandList: commandList,
+    sendUnrecognizedCommand: sendUnrecognizedCommand
+};

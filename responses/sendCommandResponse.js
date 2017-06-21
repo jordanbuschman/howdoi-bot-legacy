@@ -1,22 +1,13 @@
 var debug = require('debug')('howdoi-bot:send-command-response');
-var spark = require('./../spark');
 
-function sendUnrecognizedCommand(roomId, end) {
-    var text = 'Unrecognized command. To see a list of supported commands, use the command `howdoi /help`.';
-
-    spark.sendMessage(roomId, text, function(err) {
-        if (err) {
-            throw err;
-        } else {
-            end();
-        }
-    });
-}
+var commands = require('./../commands');
 
 module.exports = function(roomId, input, end) {
-    switch(input) {
-        default:
-            sendUnrecognizedCommand(roomId, end); 
+    var words = input.split(' ');
+
+    if (words[0] in commands.commandList) {
+        commands.commandList[words[0]]['function'](roomId, words.shift(), end);
+    } else {
+        commands.sendUnrecognizedCommand(roomId, end);
     }
-    end();
 };

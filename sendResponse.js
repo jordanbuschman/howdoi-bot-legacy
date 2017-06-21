@@ -28,7 +28,7 @@ module.exports = function(messageId, end) {
             return end();
         } else if (input.charAt(0) === '/') {
             debug('Interpreting text as command.');
-            sendCommandResponse(roomId, input.substring(1).split(' ')[0], end);
+            sendCommandResponse(roomId, input.substring(1), end);
         } else {
             debug('Interpreting text as Yahoo Answers question.');
             sendYAResponse(roomId, input, end);
