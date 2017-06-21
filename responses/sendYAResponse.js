@@ -5,7 +5,8 @@ var google = require('google');
 var jsdom = require('node-jsdom');
 var markdown = require('to-markdown');
 var Promise = require('promise');
-var request = require('request');
+
+var spark = require('./../spark');
 
 function getQuestionLinks(params) {
     return new Promise(function(resolve, reject) {
@@ -87,28 +88,13 @@ function sendYAMessage(params) {
 
         var body = (title ? title : '') + '\n\n---\n' + text + '\n\n---\n\n';
 
-        request({
-            method: 'POST',
-            uri: 'https://api.ciscospark.com/v1/messages',
-            headers: {
-                authorization: 'Bearer ' + process.env.ACCESS_TOKEN
-            },
-            form: {
-                roomId: roomId,
-                markdown: body
-            }
-        }, function(err, response, body) {
+        spark.sendMessage(roomId, body, function(err) {
             if (err) {
                 reject(err);
             } else {
-                if (response.statusCode !== 200) {
-                    var e = new Error(JSON.parse(body).message);
-                    reject({ status: response.statusCode, message: e.message, stack: e.stack });
-                } else {
-                    debug('Done.');
+                debug('Done.');
 
-                    resolve();
-                }
+                resolve();
             }
         });
     });

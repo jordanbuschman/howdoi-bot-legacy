@@ -1,33 +1,19 @@
 var debug = require('debug')('howdoi-bot:send-response');
 
-var request = require('request');
-
-//var sendCommandResponse = require('./responses/sendCommandResponse');
+var spark = require('./spark');
+var sendCommandResponse = require('./responses/sendCommandResponse');
 var sendYAResponse = require('./responses/sendYAResponse');
 
 function getText(messageId, callback) {
     debug('Getting input text...');
 
-    request({
-        method: 'GET',
-        uri: 'https://api.ciscospark.com/v1/messages/' + messageId + '?mentionedPeople=me',
-        headers: {
-            authorization: 'Bearer ' + process.env.ACCESS_TOKEN,
-        },
-    }, function(err, response, body) {
+    spark.getMessage(messageId, function(err, roomId, text) {
         if (err) {
             callback(err);
         } else {
-            debug('Done.')
-
-            var b = JSON.parse(body);
-            if (response.statusCode !== 200) {
-                callback(new Error(b.message));
-            } else {
-                var inputs = b.text.split('howdoi');
-                var text = inputs[inputs.length-1].trim()
-                callback(null, b.roomId, text);
-            }
+            var input = text.split('howdoi');
+            var command = input[input.length-1].trim()
+            callback(null, roomId, command);
         }
     });
 }
@@ -43,8 +29,7 @@ module.exports = function(messageId, end, next) {
                 return end();
             } else if (input.charAt(0) === '/') {
                 debug('Interpreting text as command.');
-                end()
-                //sendCommandResponse(roomId, input.substring(1).split(' ')[0], end);
+                sendCommandResponse(roomId, input.substring(1).split(' ')[0], end);
             } else {
                 debug('Interpreting text as Yahoo Answers question.');
                 sendYAResponse(roomId, input, end);
