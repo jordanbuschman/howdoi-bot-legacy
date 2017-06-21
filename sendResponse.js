@@ -18,24 +18,20 @@ function getText(messageId, callback) {
     });
 }
 
-module.exports = function(messageId, end, next) {
+module.exports = function(messageId, end) {
     getText(messageId, function(err, roomId, input) {
         if (err) {
             return next(err);
         }
 
-        try {
-            if (!input) {
-                return end();
-            } else if (input.charAt(0) === '/') {
-                debug('Interpreting text as command.');
-                sendCommandResponse(roomId, input.substring(1).split(' ')[0], end);
-            } else {
-                debug('Interpreting text as Yahoo Answers question.');
-                sendYAResponse(roomId, input, end);
-            }
-        } catch(err) {
-            next(err);
+        if (!input) {
+            return end();
+        } else if (input.charAt(0) === '/') {
+            debug('Interpreting text as command.');
+            sendCommandResponse(roomId, input.substring(1).split(' ')[0], end);
+        } else {
+            debug('Interpreting text as Yahoo Answers question.');
+            sendYAResponse(roomId, input, end);
         }
     });
 };

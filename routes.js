@@ -19,7 +19,11 @@ router.post('/message', checkHeaders, function(req, res, next) {
         return res.status(400).json({ 'status': 400, 'message': 'Missing message body' });
     }
 
-    sendResponse(req.body.data.id, res.end.bind(res), next);
+    try {
+        sendResponse(req.body.data.id, res.end.bind(res));
+    } catch(err) {
+        next(err);
+    }
 });
 
 module.exports = router;
