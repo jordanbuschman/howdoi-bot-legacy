@@ -13,7 +13,7 @@ function sendUnrecognizedCommand(roomId, end) {
 }
 
 function aboutFunction(roomId, parameters, end) {
-    spark.sendMessage(roomId, 'About function goes here', function(err) {
+    spark.sendMessage(roomId, 'Beep boop, I am howdoi-bot, your spicy personal assistant. Ask me a question, or run a command (see all commands with `howdoi /help`).', function(err) {
         if (err) {
             throw err;
         } else {
