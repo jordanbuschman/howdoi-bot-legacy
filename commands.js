@@ -46,7 +46,12 @@ function helpFunction(roomId, parameters, end) {
 }
 
 function statusFunction(roomId, parameters, end) {
-    spark.sendImage(roomId, 'https://i.warosu.org/data/tg/img/0423/56/1441675331137.gif', function(err) {
+    var gifs = [
+        'https://i.warosu.org/data/tg/img/0423/56/1441675331137.gif',
+        'https://media.giphy.com/media/11ziErSEWbAlXi/giphy.gif'
+    ];
+
+    spark.sendImage(roomId, gifs[Math.floor(Math.random()*gifs.length)], function(err) {
         if (err) {
             throw err;
         } else {
