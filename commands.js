@@ -45,6 +45,16 @@ function helpFunction(roomId, parameters, end) {
     });
 }
 
+function statusFunction(roomId, parameters, end) {
+    spark.sendImage(roomId, 'https://i.warosu.org/data/tg/img/0423/56/1441675331137.gif', function(err) {
+        if (err) {
+            throw err;
+        } else {
+            end();
+        }
+    });
+}
+
 var commandList = {
     'about': {
         'description': 'Get information about howdoi-bot.',
@@ -55,6 +65,11 @@ var commandList = {
         'description': 'Display this list.',
         'parameters': [],
         'function': helpFunction
+    },
+    'status': {
+        'description': 'Get real-time status of howdoi-bot',
+        'parameters': [],
+        'function': statusFunction
     }
 };
 
