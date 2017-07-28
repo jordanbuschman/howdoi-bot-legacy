@@ -48,7 +48,8 @@ function helpFunction(roomId, parameters, end) {
 function statusFunction(roomId, parameters, end) {
     var gifs = [
         'https://i.warosu.org/data/tg/img/0423/56/1441675331137.gif',
-        'https://media.giphy.com/media/11ziErSEWbAlXi/giphy.gif'
+        'https://media.giphy.com/media/11ziErSEWbAlXi/giphy.gif',
+        'https://media.tenor.com/images/b7a43f2a884a5469c505b3b0838b6aa2/tenor.gif'
     ];
 
     spark.sendImage(roomId, gifs[Math.floor(Math.random()*gifs.length)], function(err) {
