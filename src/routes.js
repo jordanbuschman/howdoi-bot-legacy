@@ -3,13 +3,13 @@ var debug = require('debug')('howdoi-bot:routes');
 var express = require('express');
 var path = require('path');
 
-var checkHeaders = require('./middleware').checkHeaders;
+var checkHeaders = require('../lib/middleware').checkHeaders;
 var sendResponse = require('./sendResponse');
 
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-    res.sendFile(path.join(__dirname, 'skeletor.png'));
+    res.sendFile(path.join(__dirname, '../public/skeletor.png'));
 });
 
 router.post('/message', checkHeaders, function(req, res, next) {

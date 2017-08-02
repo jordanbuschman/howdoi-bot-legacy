@@ -6,7 +6,7 @@
 
 var debug = require('debug')('howdoi-bot:server');
 
-var app = require('../app');
+var app = require('../src/app');
 var http = require('http');
 
 /**
