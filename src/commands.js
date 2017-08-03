@@ -1,4 +1,4 @@
-var spark = require('../lib/spark');
+var spark = require('./spark');
 
 function sendUnrecognizedCommand(roomId, end) {
     var text = 'Unrecognized command. To see a list of supported commands, use the command `howdoi /help`.';

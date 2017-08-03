@@ -1,6 +1,6 @@
 var debug = require('debug')('howdoi-bot:send-command-response');
 
-var commands = require('../../lib/commands');
+var commands = require('../commands');
 
 module.exports = function(roomId, input, end) {
     var words = input.split(' ');

@@ -6,7 +6,7 @@ var jsdom = require('node-jsdom');
 var markdown = require('to-markdown');
 var Promise = require('promise');
 
-var spark = require('../../lib/spark');
+var spark = require('../spark');
 
 function getQuestionLinks(params) {
     return new Promise(function(resolve, reject) {

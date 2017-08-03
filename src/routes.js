@@ -3,7 +3,7 @@ var debug = require('debug')('howdoi-bot:routes');
 var express = require('express');
 var path = require('path');
 
-var checkHeaders = require('../lib/middleware').checkHeaders;
+var checkHeaders = require('./middleware').checkHeaders;
 var sendResponse = require('./sendResponse');
 
 var router = express.Router();
