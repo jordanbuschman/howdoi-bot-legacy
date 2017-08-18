@@ -4,21 +4,13 @@ function sendUnrecognizedCommand(roomId, end) {
     var text = 'Unrecognized command. To see a list of supported commands, use the command `howdoi /help`.';
 
     spark.sendMessage(roomId, text, function(err) {
-        if (err) {
-            throw err;
-        } else {
-            end();
-        }
+        end(err);
     });
 }
 
 function aboutFunction(roomId, parameters, end) {
     spark.sendMessage(roomId, 'Beep boop, I am howdoi-bot, your spicy personal assistant. Ask me a question, or run a command (see all commands with `howdoi /help`).', function(err) {
-        if (err) {
-            throw err;
-        } else {
-            end();
-        }
+        end(err);
     });
 }
 
@@ -37,11 +29,7 @@ function helpFunction(roomId, parameters, end) {
     }
 
     spark.sendMessage(roomId, text, function(err) {
-        if (err) {
-            throw err;
-        } else {
-            end();
-        }
+        end(err);
     });
 }
 
@@ -53,11 +41,7 @@ function statusFunction(roomId, parameters, end) {
     ];
 
     spark.sendImage(roomId, gifs[Math.floor(Math.random()*gifs.length)], function(err) {
-        if (err) {
-            throw err;
-        } else {
-            end();
-        }
+        end(err);
     });
 }
 
